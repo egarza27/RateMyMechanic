@@ -34,13 +34,13 @@ CREATE TABLE usersAddress (
 );
 
 CREATE TABLE usersVehicles (
-  id INT NOT NULL AUTO_INCREMENT,
+  vehicle_id INT NOT NULL AUTO_INCREMENT,
   user_id INT NOT NULL,
   brand VARCHAR(100),
   model VARCHAR(50),
   year VARCHAR(50),
   vin VARCHAR(50),
-  PRIMARY KEY (id),
+  PRIMARY KEY (vehicle_id),
   FOREIGN KEY (user_id)
   REFERENCES users (id)
     ON DELETE CASCADE
@@ -61,10 +61,14 @@ CREATE TABLE usersReviews (
 
 CREATE TABLE usersCredentials (
   id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
   username VARCHAR(25),
   password VARCHAR(100),
+  UNIQUE KEY (username),
   PRIMARY KEY (id),
-  UNIQUE KEY (username)
+  FOREIGN KEY (user_id)
+    REFERENCES users (id)
+    ON DELETE CASCADE
 );
 
 INSERT INTO users

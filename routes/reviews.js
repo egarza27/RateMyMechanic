@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/:id", usersController.getReviewByUserId);
 
-router.post("/", checkJwt, usersController.createReview);
+router.post("/", usersController.createReview);
 
 module.exports = router;

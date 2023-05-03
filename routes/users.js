@@ -7,7 +7,7 @@ router.get("/", usersController.getAllUsers);
 
 router.get("/:id", usersController.getUserById);
 
-router.post("/", usersController.createUser);
+router.post("/users", usersController.createUser);
 
 router.put("/:id", usersController.updateUserById);
 
