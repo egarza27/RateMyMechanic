@@ -20,9 +20,6 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  // const { firstName, lastName } = req.body;
-  // let sql = "INSERT INTO users (first_name, last_name) VALUES (?, ?)";
-  // sql = mysql.format(sql, [firstName, lastName]);
   let sql = "INSERT INTO users (`first_name`, `last_name`) VALUES (?,?)";
 
   sql = mysql.format(sql, [req.body.first_name, req.body.last_name]);
@@ -34,9 +31,6 @@ const createUser = (req, res) => {
 };
 
 const updateUserById = (req, res) => {
-  // const { firstName, lastName } = req.body;
-  // let sql = "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?";
-  // sql = mysql.format(sql, [firstName, lastName]);
   let sql = "UPDATE users SET `first_name` = ?, `last_name` = ? WHERE id = ? ";
 
   sql = mysql.format(sql, [

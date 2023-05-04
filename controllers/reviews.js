@@ -13,10 +13,15 @@ const getReviewByUserId = (req, res) => {
 };
 
 const createReview = (req, res) => {
-  const { user_id, location, stars, reccomend, comment } = req.body;
   let sql =
-    "INSERT INTO usersReviews (user_id, location, stars, reccomend, comment) VALUES (?, ?, ?, ?, ?)";
-  sql = mysql.format(sql, [user_id, location, stars, reccomend, comment]);
+    "INSERT INTO usersReviews (`location`, `stars`, `reccomend`, `comment`) VALUES (?,?,?,?)";
+
+  sql = mysql.format(sql, [
+    req.body.location,
+    req.body.stars,
+    req.body.reccomend,
+    req.body.comment,
+  ]);
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err);

@@ -3,8 +3,8 @@ const reviewsController = require("../controllers/reviews");
 // const { checkJwt } = require("../middleware");
 const router = express.Router();
 
-router.get("/:id", usersController.getReviewByUserId);
+router.get("/:id", reviewsController.getReviewByUserId);
 
-router.post("/", usersController.createReview);
+router.post("/", reviewsController.createReview);
 
 module.exports = router;

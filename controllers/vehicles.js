@@ -20,10 +20,15 @@ const getVehiclesByUserId = (req, res) => {
 };
 
 const createVehicle = (req, res) => {
-  const { brand, model, year, vin } = req.body;
   let sql =
-    "INSERT INTO usersVehicles (brand, model, year, vin) VALUES (?, ?, ?, ?)";
-  sql = mysql.format(sql, [brand, model, year, vin]);
+    "INSERT INTO usersVehicles (`brand`, `model`, `year`, `vin`) VALUES (?,?,?,?)";
+
+  sql = mysql.format(sql, [
+    req.body.brand,
+    req.body.model,
+    req.body.year,
+    req.body.vin,
+  ]);
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err);
@@ -32,9 +37,8 @@ const createVehicle = (req, res) => {
 };
 
 const updateVehicle = (req, res) => {
-  const { brand, model, year, vin } = req.body;
   let sql =
-    "UPDATE usersVehicles SET brand = ?, model = ?, year = ?,  vin = ? WHERE user_id = ?";
+    "UPDATE usersVehicles SET `brand` = ?, `model` = ?, `year` = ?, `vin` = ? WHERE id = ? ";
   sql = mysql.format(sql, [brand, model, year, vin]);
 
   pool.query(sql, (err, results) => {
