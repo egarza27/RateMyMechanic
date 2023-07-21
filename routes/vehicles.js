@@ -1,6 +1,6 @@
 const express = require("express");
 const vehiclesController = require("../controllers/vehicles");
-// const { checkJwt } = require("../middleware");
+const { checkJwt } = require("../middleware");
 const router = express.Router();
 
 router.get("/", vehiclesController.getAllVehicles);

@@ -20,9 +20,15 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  let sql = "INSERT INTO users (`first_name`, `last_name`) VALUES (?,?)";
+  let sql =
+    "INSERT INTO users (`first_name`, `last_name`,  `user_name`, `password`) VALUES (?,?, ?, ?)";
 
-  sql = mysql.format(sql, [req.body.first_name, req.body.last_name]);
+  sql = mysql.format(sql, [
+    req.body.first_name,
+    req.body.last_name,
+    req.body.user_name,
+    req.body.password,
+  ]);
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err);
@@ -31,11 +37,14 @@ const createUser = (req, res) => {
 };
 
 const updateUserById = (req, res) => {
-  let sql = "UPDATE users SET `first_name` = ?, `last_name` = ? WHERE id = ? ";
+  let sql =
+    "UPDATE users SET `first_name` = ?, `last_name` = ?  `user_name` = ?, `password` = ?, WHERE id = ? ";
 
   sql = mysql.format(sql, [
     req.body.first_name,
     req.body.last_name,
+    req.body.user_name,
+    req.body.password,
     req.params.id,
   ]);
 

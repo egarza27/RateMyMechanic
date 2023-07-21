@@ -2,15 +2,18 @@ require("dotenv").config();
 const express = require("express");
 const usersRouter = require("./routes/users");
 const vehiclesRouter = require("./routes/vehicles");
-const reviewsRouter = require("./routes/reviews");
+const authRouter = require("./routes/auth");
+const { logger } = require("./middleware");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 4001;
 
+app.use(cors());
 app.use(express.json());
+app.use(logger);
 app.use("/users", usersRouter);
 app.use("/vehicles", vehiclesRouter);
-app.use("/reviews", reviewsRouter);
 
 app.get("/", (req, res) => res.send("Welcome to my API!"));
 
