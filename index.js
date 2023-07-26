@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(logger);
 app.use("/users", usersRouter);
 app.use("/vehicles", vehiclesRouter);
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => res.send("Welcome to my API!"));
 

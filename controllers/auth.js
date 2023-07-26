@@ -1,4 +1,3 @@
-const axios = require("axios");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -9,11 +8,13 @@ const { handleSQLError } = require("../sql/error");
 const saltRounds = 10;
 
 const signup = (req, res) => {
-  const { username, password } = req.body;
-  let sql = "INSERT INTO usersCredentials (username, password) VALUES (?, ?)";
+  const { first_name, last_name, username, password } = req.body;
+
+  let sql =
+    "INSERT INTO users (`first_name`, `last_name`,  `username`, `pwd`) VALUES (?,?, ?, ?)";
 
   bcrypt.hash(password, saltRounds, function (err, hash) {
-    sql = mysql.format(sql, [username, hash]);
+    sql = mysql.format(sql, [first_name, last_name, username, hash]);
 
     pool.query(sql, (err, result) => {
       if (err) {
@@ -28,47 +29,21 @@ const signup = (req, res) => {
 
 const login = (req, res) => {
   const { username, password } = req.body;
-
-  axios(`https://${process.env.AUTH0_DOMAIN}/oauth/token`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    data: {
-      grant_type: "password",
-      username: username,
-      password: password,
-      audience: process.env.AUTH0_IDENTITY,
-      connection: "Username-Password-Authentication",
-      client_id: process.env.AUTH0_CLIENT_ID,
-      client_secret: process.env.AUTH0_CLIENT_SECRET,
-    },
-  })
-    .then((response) => {
-      const { access_token } = response.data;
-      res.json({
-        access_token,
-      });
-    })
-    .catch((e) => {
-      res.send(e);
-    });
-
-  let sql = "SELECT * FROM usersCredentials WHERE username = ?";
+  let sql = "SELECT * FROM users WHERE username = ?";
   sql = mysql.format(sql, [username]);
 
   pool.query(sql, (err, rows) => {
     if (err) return handleSQLError(res, err);
     if (!rows.length) return res.status(404).send("No matching users");
 
-    const hash = rows[0].password;
+    const hash = rows[0].pwd;
     bcrypt.compare(password, hash).then((result) => {
       if (!result) return res.status(400).send("Invalid password");
 
       const data = { ...rows[0] };
-      data.password = "REDACTED";
+      data.pwd = "REDACTED";
 
-      const token = jwt.sign(data, "secret");
+      const token = jwt.sign(data, process.env.JWTSECRET);
       res.json({
         msg: "Login successful",
         token,

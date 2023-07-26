@@ -4,6 +4,8 @@ CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(50),
   last_name VARCHAR(50),
+  username VARCHAR(50),
+  pwd VARCHAR(255),
   PRIMARY KEY (id)
 );
 

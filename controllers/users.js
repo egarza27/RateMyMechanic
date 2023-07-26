@@ -21,12 +21,12 @@ const getUserById = (req, res) => {
 
 const createUser = (req, res) => {
   let sql =
-    "INSERT INTO users (`first_name`, `last_name`,  `user_name`, `password`) VALUES (?,?, ?, ?)";
+    "INSERT INTO users (`first_name`, `last_name`,  `username`, `pwd`) VALUES (?,?, ?, ?)";
 
   sql = mysql.format(sql, [
     req.body.first_name,
     req.body.last_name,
-    req.body.user_name,
+    req.body.username,
     req.body.password,
   ]);
 
@@ -38,12 +38,12 @@ const createUser = (req, res) => {
 
 const updateUserById = (req, res) => {
   let sql =
-    "UPDATE users SET `first_name` = ?, `last_name` = ?  `user_name` = ?, `password` = ?, WHERE id = ? ";
+    "UPDATE users SET `first_name` = ?, `last_name` = ?  `username` = ?, `pwd` = ?, WHERE id = ? ";
 
   sql = mysql.format(sql, [
     req.body.first_name,
     req.body.last_name,
-    req.body.user_name,
+    req.body.username,
     req.body.password,
     req.params.id,
   ]);
