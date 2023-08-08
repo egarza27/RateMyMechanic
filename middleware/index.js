@@ -1,24 +1,24 @@
 const jwt = require("jsonwebtoken");
 
-const logger = (req, res, next) => {
-  console.log(`${req.path} ${new Date().toISOString()}`);
-  next();
-};
+const checkJwt = (req, res, next) => {
+  const header = req.get("Authorization");
+  let signToken;
 
-const authenticate = (req, res, next) => {
-  const header = req.headers["authorization"] || "";
-  const [bearer, token] = header.split(" ");
-
-  try {
-    const decoded = jwt.verify(token, "secret");
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.sendStatus(401);
+  if (header) {
+    signToken = header.split(" ")[1];
+  }
+  if (signToken) {
+    try {
+      const decoded = jwt.verify(signToken, process.env.JWTSECRET);
+      req.user = decoded;
+      console.log(decoded);
+      next();
+    } catch (err) {
+      res.sendStatus(401);
+    }
   }
 };
 
 module.exports = {
-  logger,
-  authenticate,
+  checkJwt,
 };
