@@ -5,7 +5,13 @@ const router = express.Router();
 
 router.get("/", usersController.getAllUsers);
 
-router.get("/:id", usersController.getUserById);
+router.get("/userId", checkJwt, usersController.getUserById);
+
+router.get(
+  "/userDataAndVehicles",
+  checkJwt,
+  usersController.getUserProfileWithVehicles
+);
 
 router.post("/", usersController.createUser);
 

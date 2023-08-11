@@ -9,6 +9,17 @@ const getAllUsers = (req, res) => {
   });
 };
 
+const getUserProfileWithVehicles = (req, res) => {
+  let sql =
+    "SELECT `first_name`, `last_name`, `username`, `vin`, `mileage` FROM users LEFT JOIN usersVehicles ON users.id = usersVehicles.user_id WHERE users.id = ?";
+  sql = mysql.format(sql, [req.user.id]);
+  console.log(req.user.id);
+  pool.query(sql, (err, rows) => {
+    if (err) return handleSQLError(res, err);
+    return res.json(rows);
+  });
+};
+
 const getUserById = (req, res) => {
   let sql = "SELECT * FROM users WHERE id = ?";
   sql = mysql.format(sql, [req.params.id]);
@@ -66,6 +77,7 @@ const deleteUserByFirstName = (req, res) => {
 
 module.exports = {
   getAllUsers,
+  getUserProfileWithVehicles,
   getUserById,
   createUser,
   updateUserById,
