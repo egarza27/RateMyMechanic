@@ -3,12 +3,12 @@ const mysql = require("mysql2");
 const pool = require("../sql/connections");
 const { handleSQLError } = require("../sql/error");
 
-const getAllVehicles = (req, res) => {
-  pool.query("SELECT * FROM usersVehicles", (err, rows) => {
-    if (err) return handleSQLError(res, err);
-    return res.json(rows);
-  });
-};
+// const getAllVehicles = (req, res) => {
+//   pool.query("SELECT * FROM usersVehicles", (err, rows) => {
+//     if (err) return handleSQLError(res, err);
+//     return res.json(rows);
+//   });
+// };
 
 const getVehiclesByUserId = (req, res) => {
   let sql = "SELECT * FROM usersVehicles WHERE user_id = ?";
@@ -32,9 +32,10 @@ const createVehicle = (req, res) => {
   });
 };
 
-const updateVehicle = (req, res) => {
-  let sql = "UPDATE usersVehicles SET `vin` = ?, `mileage` = ?, WHERE id = ? ";
-  sql = mysql.format(sql, [brand, model, year, vin]);
+const updateMileage = (req, res) => {
+  let sql =
+    "UPDATE usersVehicles SET `mileage` = ? WHERE `user_id` = ? AND `vin` = ?";
+  sql = mysql.format(sql, [req.body.mileage, req.user.id, req.body.vin]);
 
   pool.query(sql, (err, results) => {
     if (err) return handleSQLError(res, err);
@@ -55,9 +56,9 @@ const deleteVehicleByVin = (req, res) => {
 };
 
 module.exports = {
-  getAllVehicles,
+  // getAllVehicles,
   getVehiclesByUserId,
   createVehicle,
-  updateVehicle,
+  updateMileage,
   deleteVehicleByVin,
 };
