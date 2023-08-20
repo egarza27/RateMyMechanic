@@ -3,13 +3,6 @@ const mysql = require("mysql2");
 const pool = require("../sql/connections");
 const { handleSQLError } = require("../sql/error");
 
-// const getAllVehicles = (req, res) => {
-//   pool.query("SELECT * FROM usersVehicles", (err, rows) => {
-//     if (err) return handleSQLError(res, err);
-//     return res.json(rows);
-//   });
-// };
-
 const getVehiclesByUserId = (req, res) => {
   let sql = "SELECT * FROM usersVehicles WHERE user_id = ?";
   sql = mysql.format(sql, [req.user.id]);
@@ -43,20 +36,17 @@ const updateMileage = (req, res) => {
   });
 };
 
-// ADD DELETE METHOD
-
 const deleteVehicleByVin = (req, res) => {
-  let sql = "DELETE FROM usersVehicles WHERE vin = ?";
-  sql = mysql.format(sql, [req.params.vin]);
+  let sql = "DELETE FROM usersVehicles WHERE `vin` = ?";
+  sql = mysql.format(sql, [req.body.vin]);
 
   pool.query(sql, req.params.vin, (err, results) => {
     if (err) return handleSQLError(res, err);
-    return res.json({ message: `Deleted ${results.affectedRows} user(s)` });
+    return res.json({ message: `Deleted ${results.affectedRows} vehicles(s)` });
   });
 };
 
 module.exports = {
-  // getAllVehicles,
   getVehiclesByUserId,
   createVehicle,
   updateMileage,
