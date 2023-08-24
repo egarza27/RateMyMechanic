@@ -3,6 +3,7 @@ const express = require("express");
 const usersRouter = require("./routes/users");
 const vehiclesRouter = require("./routes/vehicles");
 const authRouter = require("./routes/auth");
+const http = require("http");
 
 const cors = require("cors");
 
@@ -30,20 +31,31 @@ app.get("/api/proxy", async (req, res) => {
     );
 
     const apiUrl = `http://api.carmd.com/v3.0/maint?vin=${vin}&mileage=${mileage}`;
-    const response = await fetch(apiUrl, {
+
+    const options = {
       headers: {
-        "content-type": "application/json",
-        authorization: `Basic ${process.env.API_KEY}`,
-        "partner-token": process.env.PARTNER_TOKEN,
+        "Content-Type": "application/json",
+        Authorization: `Basic ${process.env.API_KEY}`,
+        "Partner-Token": process.env.PARTNER_TOKEN,
       },
+    };
+
+    http.get(apiUrl, options, (responseFromExternalAPI) => {
+      let data = "";
+
+      responseFromExternalAPI.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      responseFromExternalAPI.on("end", () => {
+        console.log(
+          `API request successful for VIN: ${vin}, Mileage: ${mileage}`
+        );
+        const responseData = JSON.parse(data);
+        console.log("Received data from external service:", responseData);
+        res.json(responseData);
+      });
     });
-
-    console.log(`API request successful for VIN: ${vin}, Mileage: ${mileage}`);
-
-    const data = await response.json();
-    console.log("Received data from external service:", data);
-
-    res.json(data);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "An error occurred" });
